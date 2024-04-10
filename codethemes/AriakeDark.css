@@ -1,0 +1,71 @@
+/*
+  Colors:
+  - Cyan: #33CCFF
+  - Blue: #F2FBFF
+  - Purple: #4C6CB3
+  - Green: #8BF6E9
+
+  - Red 1: #4C8EB3
+  - Red 2: #336699
+
+  - Orange 1: #CC99FF
+  - Orange 2: #B266FF
+
+  - Comment: #B2B8C2
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #282a36;
+}
+.hljs-keyword,
+.hljs-link,
+.hljs-literal,
+.hljs-section,
+.hljs-selector-tag {
+  color: #B266FF;
+}
+.hljs-function .hljs-keyword {
+  color: #B266FF;
+}
+.hljs,
+.hljs-subst {
+  color: #F2FBFF;
+}
+.hljs-title {
+  color: #CC99FF;
+}
+.hljs-addition,
+.hljs-attribute,
+.hljs-bullet,
+.hljs-name,
+.hljs-string,
+.hljs-symbol,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable {
+  color: #8BF6E9;
+}
+.hljs-comment,
+.hljs-deletion,
+.hljs-meta,
+.hljs-quote {
+  color: #B2B8C2;
+}
+.hljs-doctag,
+.hljs-keyword,
+.hljs-literal,
+.hljs-name,
+.hljs-section,
+.hljs-selector-tag,
+.hljs-strong,
+.hljs-title,
+.hljs-type {
+  font-weight: 700;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
