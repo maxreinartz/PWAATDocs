@@ -5,12 +5,21 @@
     <link rel="stylesheet" href="/codethemes/AriakeDark.css" />
     <style>
       body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
         background-color: #282a36;
         color: #f8f8f2;
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
         border: none;
+      }
+      footer {
+        margin-top: auto;
+        width: 100%;
+        text-align: center;
+        font-size: 0.8em;
       }
       .container {
         margin: 0 auto;
@@ -31,7 +40,7 @@
   <body>
     <div class="container">
       <h1>PWAAT - decryptionCtrl</h1>
-      <a href="../index.html" style="font-size: 2vh"><i>Back to Home</i></a>
+      <a href="../index.html" style="font-size: 14px"><i>Back to Home</i></a>
       <p>
         This file, which I'll call DecryptionControl, is responsible for
         decrypting the assets the game uses like music, sprites, etc. The game
@@ -131,7 +140,7 @@
     cryptoTransform.Dispose();
     return array2;
   }
-        </code></pre>
+      </code></pre>
       <p>
         <br />
 
@@ -290,17 +299,14 @@
 
         I hope this information helps you understand how the game decrypts its assets and how you can decrypt them yourself.
       </p>
-      <br />
-      <footer
-        style="
-          width: 100%;
-          text-align: center;
-          font-size: 0.8em;
-        "
-      >
-        <p>Copyright (c) Creeper76 2024</p>
-      </footer>
     </div>
+    <footer>
+      <p>
+        Copyright (c) Creeper76 2024 <br />
+        PWAAT Docs is an independent project and is not endorsed, sponsored,
+        or affiliated with Capcom Co., Ltd.
+      </p>
+    </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
     <script>
       hljs.highlightAll();

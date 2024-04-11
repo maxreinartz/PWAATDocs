@@ -5,12 +5,21 @@
     <link rel="stylesheet" href="/codethemes/AriakeDark.css" />
     <style>
       body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
         background-color: #282a36;
         color: #f8f8f2;
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
         border: none;
+      }
+      footer {
+        margin-top: auto;
+        width: 100%;
+        text-align: center;
+        font-size: 0.8em;
       }
       .container {
         margin: 0 auto;
@@ -31,27 +40,28 @@
   <body>
     <div class="container">
       <h1>PWAAT - File List</h1>
-      <a href="../index.html" style="font-size: 2vh"><i>Back to Home</i></a>
+      <a href="../index.html" style="font-size: 14px"><i>Back to Home</i></a>
       <p>
         Contains a list of files in the PWAAT game. Each file will have a
         description of what it does, but they will not have a code snippet.
+
+        <br />
+        <br />
+
+        * = File is empty.
       </p>
       <h2>File List</h2>
-      <!-- Fancy directory view cause I'm cool -->
+      <a href="DebugSkipDrawer.html">DebugSkipDrawer.cs</a><br />
+      <a href="DebugToTitle.html">*DebugToTitle.cs</a><br />
       <a href="decryptionCtrl.html">decryptionCtrl.cs</a><br />
-      <a href="section2.html">Section 2</a> <br />
-      <a href="section3.html">Section 3</a>
-      <br />
-      <footer
-        style="
-          width: 100%;
-          text-align: center;
-          font-size: 0.8em;
-        "
-      >
-        <p>Copyright (c) Creeper76 2024</p>
-      </footer>
     </div>
+    <footer>
+      <p>
+        Copyright (c) Creeper76 2024 <br />
+        PWAAT Docs is an independent project and is not endorsed, sponsored,
+        or affiliated with Capcom Co., Ltd.
+      </p>
+    </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
     <script>
       hljs.highlightAll();
