@@ -1,7 +1,7 @@
 # Phoenix Wright: Ace Attorney Trilogy (PWAAT) Documentation
 
 The goal of this project is to create documentation for all of PWAAT steam game.
-You can find it [here](https://maxreinartz.me/PWAATDocs) on my website!
+You can find it [here](https://pwaatdocs.maxreinartz.me/) on my website!
 
 ## Table of Contents
 
