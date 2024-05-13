@@ -3,6 +3,10 @@
   <head>
     <title>decryptionCtrl - PWAAT Documentation - Written by Creeper76</title>
     <link rel="stylesheet" href="/codethemes/AriakeDark.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <style>
       body {
         display: flex;
@@ -22,6 +26,8 @@
         font-size: 0.8em;
       }
       .container {
+        display: flex;
+        flex-direction: column;
         margin: 0 auto;
         max-width: 800px;
         padding: 2em;
@@ -30,10 +36,27 @@
         background-color: #44475a;
         padding: 1em;
         overflow-x: auto;
+        border-radius: 5px;
       }
       a {
         color: #f8f8f2;
         text-decoration: underline;
+      }
+      a:hover {
+        color: #a93cdb;
+      }
+      .btn {
+        background-color: #44475a;
+        color: #f8f8f2;
+        border: none;
+        padding: 0.5em;
+        margin-top: 0.5em;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .btn:hover {
+        background-color: #a93cdb;
+        color: #282a36;
       }
     </style>
   </head>
@@ -41,18 +64,10 @@
     <div class="container">
       <h1>PWAAT - decryptionCtrl</h1>
       <a href="../index.html" style="font-size: 14px"><i>Back to Home</i></a>
-      <p>
-        This file, which I'll call DecryptionControl, is responsible for
-        decrypting the assets the game uses like music, sprites, etc. The game
-        uses aes encryption to encrypt the assets, and this file is responsible
-        for decrypting them. The decryption is done using the RijndaelManaged
-        class in C#.
-
-        <br />
-        <br />
-
-        Here is the full, unmodified code for the decryptionCtrl class:
-
+      <button id="viewCode" type="button" class="btn btn-primary">
+        <i class="fa fa-code"></i>
+      </button>
+      <div id="codeBlock" style="display: none">
         <pre><code class="hljs csharp">
   using System;
   using System.IO;
@@ -106,20 +121,26 @@
     private static decryptionCtrl instance_;
   }
         </code></pre>
+      </div>
+      <p>
+        This file, which I'll call DecryptionControl, is responsible for
+        decrypting the assets the game uses like music, sprites, etc. The game
+        uses aes encryption to encrypt the assets, and this file is responsible
+        for decrypting them. The decryption is done using the RijndaelManaged
+        class in C#.
 
         <br />
+        <br />
+        <br />
 
-        The password for the encryption is "u8DurGE2", And the salt is
-        "6BBGizHE".
+        The password that the game uses for encryption is "u8DurGE2" and the
+        salt is "6BBGizHE".
 
         <br />
         <br />
         <br />
 
         Here is the code the game uses to load and decrypt the assets:
-
-        <br />
-        <br />
       </p>
       <pre><code class="hljs csharp">
   public byte[] load(string in_path)
@@ -142,62 +163,61 @@
   }
       </code></pre>
       <p>
-        <br />
-
         Here's a breakdown of the code:
 
         <br />
         <br />
         <br />
 
-        This line declares a public function named load that takes a string argument in_path and returns a byte array.
-        <pre><code>public byte[] load(string in_path)</code></pre>
+        This function, `load`, takes a file path as an argument and returns a
+        decrypted byte array.
+      </p>
 
-        This line reads all bytes from the file at the path in_path and stores them in a byte array array.
-        <pre><code>byte[] array = File.ReadAllBytes(in_path);</code></pre>
+      <pre><code>public byte[] load(string in_path)</code></pre>
 
-        This line creates a new instance of the RijndaelManaged class, which provides the functionality of the Rijndael (AES) symmetric algorithm.
-        <pre><code>RijndaelManaged rijndaelManaged = new RijndaelManaged();</code></pre>
+      It reads all bytes from the file and stores them in a byte array.
+      <pre><code>byte[] array = File.ReadAllBytes(in_path);</code></pre>
 
-        These lines set the key size and block size of the RijndaelManaged instance to 128 bits.
-        <pre><code>rijndaelManaged.KeySize = 128;</code></pre> and <pre><code>rijndaelManaged.BlockSize = 128;</code></pre>
+      An instance of `RijndaelManaged` is created for AES encryption, with key
+      and block sizes set to 128 bits.
+      <pre><code>RijndaelManaged rijndaelManaged = new RijndaelManaged();
+rijndaelManaged.KeySize = 128;
+rijndaelManaged.BlockSize = 128;</code></pre>
 
-        These lines define the password and salt used for the encryption.
-        <pre><code>string text = "u8DurGE2";</code></pre> and <pre><code>string text2 = "6BBGizHE";</code></pre>
+      The password and salt are defined, and the salt is converted to a byte
+      array.
+      <pre><code>string text = "u8DurGE2"; 
+string text2 = "6BBGizHE";
+byte[] bytes = Encoding.UTF8.GetBytes(text2);</code></pre>
 
-        This line converts the salt string text2 to a byte array using UTF-8 encoding.
-        <pre><code>byte[] bytes = Encoding.UTF8.GetBytes(text2);</code></pre>
+      A `Rfc2898DeriveBytes` instance is created with the password and salt, and
+      the iteration count is set to 1000. This generates the key and
+      initialization vector (IV) for the `RijndaelManaged` instance.
+      <pre><code>Rfc2898DeriveBytes rfc2898DeriveBytes = new Rfc2898DeriveBytes(text, bytes);
+rfc2898DeriveBytes.IterationCount = 1000;
+rijndaelManaged.Key = rfc2898DeriveBytes.GetBytes(rijndaelManaged.KeySize / 8);
+rijndaelManaged.IV = rfc2898DeriveBytes.GetBytes(rijndaelManaged.BlockSize / 8);</code></pre>
 
-        This line creates a new instance of the Rfc2898DeriveBytes class, which generates key material using the PBKDF2 function from a password, salt, and iteration count.
-        <pre><code>Rfc2898DeriveBytes rfc2898DeriveBytes = new Rfc2898DeriveBytes(text, bytes);</code></pre>
-        
-        This line sets the iteration count for the Rfc2898DeriveBytes instance to 1000.
-        <pre><code>rfc2898DeriveBytes.IterationCount = 1000;</code></pre>
+      A decryptor is created, which decrypts the data and stores it in a new
+      byte array. The decryptor is then disposed of.
+      <pre><code>ICryptoTransform cryptoTransform = rijndaelManaged.CreateDecryptor();
+byte[] array2 = cryptoTransform.TransformFinalBlock(array, 0, array.Length);
+cryptoTransform.Dispose();</code></pre>
 
-        These lines generate the key and initialization vector (IV) for the RijndaelManaged instance from the Rfc2898DeriveBytes instance.
-        <pre><code>rijndaelManaged.Key = rfc2898DeriveBytes.GetBytes(rijndaelManaged.KeySize / 8);</code></pre> and <pre><code>rijndaelManaged.IV = rfc2898DeriveBytes.GetBytes(rijndaelManaged.BlockSize / 8);</code></pre>
-        
-        This line creates a decryptor that can perform the decryption transformation.
-        <pre><code>ICryptoTransform cryptoTransform = rijndaelManaged.CreateDecryptor();</code></pre>
+      Finally, the decrypted data is returned.
+      <pre><code>return array2;</code></pre>
 
-        This line decrypts the encrypted data array and stores the decrypted data in array2.
-        <pre><code>byte[] array2 = cryptoTransform.TransformFinalBlock(array, 0, array.Length);</code></pre>
+      <br />
 
-        This line releases all resources used by the CryptoTransform.
-        <pre><code>cryptoTransform.Dispose();</code></pre>
+      Now that you know how the game decrypts the assets, you can now decrypt
+      the assets yourself. In my case, I created a python program that decrypts
+      the assets and saves them to a folder. Below, you can see the python code
+      I used to decrypt the assets:
 
-        This line returns the decrypted data.
-        <pre><code>return array2;</code></pre>
+      <br />
+      <br />
 
-        <br />
-
-        Now that you know how the game decrypts the assets, you can now decrypt the assets yourself. In my case, I created a python program that decrypts the assets and saves them to a folder.
-        Below, you can see the python code I used to decrypt the assets:
-
-        <br />
-        <br />
-
-        <pre><code class="hljs python">
+      <pre><code class="hljs python">
   import os
   import traceback
   from Crypto.Cipher import AES
@@ -206,20 +226,20 @@
   import base64
   
   def decrypt_file(file_path, password, salt, key_size=128, block_size=128, iterations=1000):
-      # Read the encrypted file
-      with open(file_path, 'rb') as file:
-          encrypted_data = file.read()
+  # Read the encrypted file
+  with open(file_path, 'rb') as file:
+      encrypted_data = file.read()
   
-      # Derive the key and IV
-      key_iv = PBKDF2(password, salt.encode(), dkLen=key_size//8 + block_size//8, count=iterations)
-      key = key_iv[:key_size//8]
-      iv = key_iv[key_size//8:]
+  # Derive the key and IV
+  key_iv = PBKDF2(password, salt.encode(), dkLen=key_size//8 + block_size//8, count=iterations)
+  key = key_iv[:key_size//8]
+  iv = key_iv[key_size//8:]
   
-      # Create the cipher object and decrypt the data
-      cipher = AES.new(key, AES.MODE_CBC, iv)
-      decrypted_data = unpad(cipher.decrypt(encrypted_data), block_size//8)
+  # Create the cipher object and decrypt the data
+  cipher = AES.new(key, AES.MODE_CBC, iv)
+  decrypted_data = unpad(cipher.decrypt(encrypted_data), block_size//8)
   
-      return decrypted_data
+  return decrypted_data
   
   # Usage
   encrypted_folder = '[REPLACE WITH PATH TO FOLDER]'
@@ -233,83 +253,97 @@
   
   # Check if the encrypted folder exists
   if not os.path.exists(encrypted_folder):
-      print(f"Encrypted folder does not exist: {encrypted_folder}")
+  print(f"Encrypted folder does not exist: {encrypted_folder}")
   else:
-      print(f"Encrypted folder exists: {encrypted_folder}")
+  print(f"Encrypted folder exists: {encrypted_folder}")
   
   # Check if there are any files in the encrypted folder
   if not any(os.scandir(encrypted_folder)):
-      print(f"No files found in encrypted folder: {encrypted_folder}")
+  print(f"No files found in encrypted folder: {encrypted_folder}")
   else:
-      print(f"Files found in encrypted folder: {encrypted_folder}")
+  print(f"Files found in encrypted folder: {encrypted_folder}")
   
   # Decrypt all files in the encrypted folder and its subfolders
   for root, dirs, files in os.walk(encrypted_folder):
-      for file_name in files:
-          file_path = os.path.join(root, file_name)
-          
-          # Create the same subdirectory structure in the decrypted folder
-          relative_path = os.path.relpath(root, encrypted_folder)
-          decrypted_root = os.path.join(decrypted_folder, relative_path)
-          os.makedirs(decrypted_root, exist_ok=True)
+  for file_name in files:
+      file_path = os.path.join(root, file_name)
+      
+      # Create the same subdirectory structure in the decrypted folder
+      relative_path = os.path.relpath(root, encrypted_folder)
+      decrypted_root = os.path.join(decrypted_folder, relative_path)
+      os.makedirs(decrypted_root, exist_ok=True)
   
-          # Save the decrypted data to a file in the decrypted folder
-          decrypted_file_path = os.path.join(decrypted_root, file_name)
+      # Save the decrypted data to a file in the decrypted folder
+      decrypted_file_path = os.path.join(decrypted_root, file_name)
   
-          # Check if the decrypted file already exists
-          if os.path.exists(decrypted_file_path):
-              print(f"File {decrypted_file_path} already exists. Skipping.")
-              continue
+      # Check if the decrypted file already exists
+      if os.path.exists(decrypted_file_path):
+          print(f"File {decrypted_file_path} already exists. Skipping.")
+          continue
   
-          try:
-              print(f"Decrypting file: {file_path}")  # Print the file being decrypted
-              decrypted_data = decrypt_file(file_path, password, salt)
+      try:
+          print(f"Decrypting file: {file_path}")  # Print the file being decrypted
+          decrypted_data = decrypt_file(file_path, password, salt)
   
-              print(f"Saving decrypted file to: {decrypted_file_path}")  # Print the output file path
-              with open(decrypted_file_path, 'wb') as file:
-                  file.write(decrypted_data)
+          print(f"Saving decrypted file to: {decrypted_file_path}")  # Print the output file path
+          with open(decrypted_file_path, 'wb') as file:
+              file.write(decrypted_data)
   
-              successful_decryptions.append(file_path)
-          except Exception as e:
-              print(f"An error occurred during decryption of file: {file_path}")
-              print(traceback.format_exc())  # Print the full traceback of the exception
-              unsuccessful_decryptions.append(file_path)
+          successful_decryptions.append(file_path)
+      except Exception as e:
+          print(f"An error occurred during decryption of file: {file_path}")
+          print(traceback.format_exc())  # Print the full traceback of the exception
+          unsuccessful_decryptions.append(file_path)
   
   # Print the successful and unsuccessful decryptions
   print(f"Successful decryptions: {len(successful_decryptions)}")
   for file_path in successful_decryptions:
-      print(f"Successfully decrypted: {file_path}")
+  print(f"Successfully decrypted: {file_path}")
   
   print(f"Unsuccessful decryptions: {len(unsuccessful_decryptions)}")
   for file_path in unsuccessful_decryptions:
-      print(f"Failed to decrypt: {file_path}")
+  print(f"Failed to decrypt: {file_path}")
       </code></pre>
 
-        <br />
+      <br />
 
-        This code reads all the files in the encrypted folder and its subfolders, decrypts them using the decrypt_file function, and saves the decrypted data to the decrypted folder. It also prints the successful and unsuccessful decryptions.
+      This code reads all the files in the encrypted folder and its subfolders,
+      decrypts them using the decrypt_file function, and saves the decrypted
+      data to the decrypted folder. It also prints the successful and
+      unsuccessful decryptions.
 
-        <br />
-        <br />
+      <br />
 
-        You can use this code to decrypt the assets of the game and access the original files. This can be useful for modding the game or extracting the assets for other purposes.
+      You can use this code to decrypt the assets of the game and access the
+      original files. This can be useful for modding the game or extracting the
+      assets for other purposes.
 
-        <br />
-        <br />
+      <br />
 
-        I hope this information helps you understand how the game decrypts its assets and how you can decrypt them yourself.
-      </p>
+      I hope this information helps you understand how the game decrypts its
+      assets and how you can decrypt them yourself.
     </div>
     <footer>
       <p>
         Copyright (c) Creeper76 2024 <br />
-        PWAAT Docs is an independent project and is not endorsed, sponsored,
-        or affiliated with Capcom Co., Ltd.
+        PWAAT Docs is an independent project and is not endorsed, sponsored, or
+        affiliated with Capcom Co., Ltd.
       </p>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
     <script>
       hljs.highlightAll();
+
+      document
+        .getElementById("viewCode")
+        .addEventListener("click", function () {
+          var codeBlock = document.getElementById("codeBlock");
+          if (codeBlock.style.display === "none") {
+            codeBlock.style.display = "block";
+          } else {
+            codeBlock.style.display = "none";
+          }
+        });
     </script>
   </body>
 </html>

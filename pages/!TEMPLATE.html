@@ -3,6 +3,10 @@
   <head>
     <title>TEMPLATE - PWAAT Documentation - Written by Creeper76</title>
     <link rel="stylesheet" href="/codethemes/AriakeDark.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <style>
       body {
         display: flex;
@@ -22,6 +26,8 @@
         font-size: 0.8em;
       }
       .container {
+        display: flex;
+        flex-direction: column;
         margin: 0 auto;
         max-width: 800px;
         padding: 2em;
@@ -30,10 +36,27 @@
         background-color: #44475a;
         padding: 1em;
         overflow-x: auto;
+        border-radius: 5px;
       }
       a {
         color: #f8f8f2;
         text-decoration: underline;
+      }
+      a:hover {
+        color: #a93cdb;
+      }
+      .btn {
+        background-color: #44475a;
+        color: #f8f8f2;
+        border: none;
+        padding: 0.5em;
+        margin-top: 0.5em;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .btn:hover {
+        background-color: #a93cdb;
+        color: #282a36;
       }
     </style>
   </head>
@@ -41,6 +64,20 @@
     <div class="container">
       <h1>PWAAT - TEMPLATE</h1>
       <a href="../index.html" style="font-size: 14px"><i>Back to Home</i></a>
+      <button id="viewCode" type="button" class="btn btn-primary">
+        <i class="fa fa-code"></i>
+      </button>
+      <div id="codeBlock" style="display: none">
+        <pre><code class="hljs csharp">
+  public class Program
+  {
+      public static void Main()
+      {
+          Console.WriteLine("Lorem ipsum dolor sit amet.");
+      }
+  }
+        </code></pre>
+      </div>
       <p>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias,
         soluta? Illo perspiciatis voluptates et magnam, amet explicabo ut error
@@ -60,13 +97,24 @@
     <footer>
       <p>
         Copyright (c) Creeper76 2024 <br />
-        PWAAT Docs is an independent project and is not endorsed, sponsored,
-        or affiliated with Capcom Co., Ltd.
+        PWAAT Docs is an independent project and is not endorsed, sponsored, or
+        affiliated with Capcom Co., Ltd.
       </p>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
     <script>
       hljs.highlightAll();
+
+      document
+        .getElementById("viewCode")
+        .addEventListener("click", function () {
+          var codeBlock = document.getElementById("codeBlock");
+          if (codeBlock.style.display === "none") {
+            codeBlock.style.display = "block";
+          } else {
+            codeBlock.style.display = "none";
+          }
+        });
     </script>
   </body>
 </html>
