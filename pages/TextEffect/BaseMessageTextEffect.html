@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BaseMessageTextEffect - PWAAT Documentation - Written by Creeper76</title>
+    <link rel="stylesheet" href="/codethemes/AriakeDark.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: #282a36;
+        color: #f8f8f2;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+      footer {
+        margin-top: auto;
+        width: 100%;
+        text-align: center;
+        font-size: 0.8em;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        max-width: 800px;
+        padding: 2em;
+      }
+      pre {
+        background-color: #44475a;
+        padding: 1em;
+        overflow-x: auto;
+        border-radius: 5px;
+      }
+      a {
+        color: #f8f8f2;
+        text-decoration: underline;
+      }
+      a:hover {
+        color: #a93cdb;
+      }
+      .btn {
+        background-color: #44475a;
+        color: #f8f8f2;
+        border: none;
+        padding: 0.5em;
+        margin-top: 0.5em;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .btn:hover {
+        background-color: #a93cdb;
+        color: #282a36;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>PWAAT - BaseMessageTextEffect</h1>
+      <a href="../../index.html" style="font-size: 14px"><i>Back to Home</i></a>
+      <button id="viewCode" type="button" class="btn btn-primary">
+        <i class="fa fa-code"></i>
+      </button>
+      <div id="codeBlock" style="display: none">
+        <pre><code class="hljs csharp">
+  public class Program
+  using System;
+  using System.Collections.Generic;
+  using UnityEngine;
+  using UnityEngine.UI;
+
+  namespace TextEffect
+  {
+    // Token: 0x0200018A RID: 394
+    [RequireComponent(typeof(Text))]
+    public abstract class BaseMessageTextEffect : BaseMeshEffect
+    {
+      // Token: 0x06000E37 RID: 3639
+      public abstract void MessageModifyMesh(ref List<UIVertex> stream);
+
+      // Token: 0x06000E38 RID: 3640 RVA: 0x00091093 File Offset: 0x0008F493
+      public new virtual void ModifyMesh(Mesh mesh)
+      {
+      }
+
+      // Token: 0x06000E39 RID: 3641 RVA: 0x00091098 File Offset: 0x0008F498
+      public override void ModifyMesh(VertexHelper vh)
+      {
+        if (!this.IsActive())
+        {
+          return;
+        }
+        if (GSStatic.global_work_.language == Language.KOREA)
+        {
+          return;
+        }
+        List<UIVertex> list = ListPool<UIVertex>.Get();
+        vh.GetUIVertexStream(list);
+        this.MessageModifyMesh(ref list);
+        vh.Clear();
+        vh.AddUIVertexTriangleStream(list);
+        ListPool<UIVertex>.Release(list);
+      }
+
+      // Token: 0x06000E3A RID: 3642 RVA: 0x000910EC File Offset: 0x0008F4EC
+      protected Vector2 GetCenterPosition(int index, List<UIVertex> ui_vertext_list)
+      {
+        return Vector2.Lerp(ui_vertext_list[index].position, ui_vertext_list[index + 3].position, 0.5f);
+      }
+
+      // Token: 0x06000E3B RID: 3643 RVA: 0x00091130 File Offset: 0x0008F530
+      protected Vector2 GetUpperPosition(int index, List<UIVertex> ui_vertext_list)
+      {
+        return Vector2.Lerp(ui_vertext_list[index].position, ui_vertext_list[index + 1].position, 0.5f);
+      }
+
+      // Token: 0x06000E3C RID: 3644 RVA: 0x00091171 File Offset: 0x0008F571
+      protected override void Start()
+      {
+        this.text_ = base.GetComponent<Text>();
+      }
+
+      // Token: 0x04001854 RID: 6228
+      protected const int CHARACTER_VERTEX_MAX = 6;
+
+      // Token: 0x04001855 RID: 6229
+      protected Text text_;
+    }
+  }
+        </code></pre>
+      </div>
+      <p>The <code>BaseMessageTextEffect</code> class is an abstract class that extends the <code>BaseMeshEffect</code> class. It is decorated with the <code>RequireComponent</code> attribute, which automatically adds the required <code>Text</code> component when a script instance is added to a GameObject.</p>
+      
+      <p>Here is the class declaration:</p>
+      
+      <pre><code class="hljs csharp">
+  [RequireComponent(typeof(Text))]
+  public abstract class BaseMessageTextEffect : BaseMeshEffect
+      </code></pre>
+      
+      <p>The main method in this class is <code>MessageModifyMesh</code>. It is an abstract method that modifies the vertices of the text mesh. Here is the method signature:</p>
+      
+      <pre><code class="hljs csharp">
+  public abstract void MessageModifyMesh(ref List&lt;UIVertex&gt; stream);
+      </code></pre>
+      
+      <p>The <code>ModifyMesh</code> method is overridden in this class. It checks if the effect is active and if the language is not Korean, then modifies the mesh accordingly:</p>
+      
+      <pre><code class="hljs csharp">
+  public override void ModifyMesh(VertexHelper vh)
+  {
+    if (!this.IsActive())
+    {
+      return;
+    }
+    if (GSStatic.global_work_.language == Language.KOREA)
+    {
+      return;
+    }
+    List&lt;UIVertex&gt; list = ListPool&lt;UIVertex&gt;.Get();
+    vh.GetUIVertexStream(list);
+    this.MessageModifyMesh(ref list);
+    vh.Clear();
+    vh.AddUIVertexTriangleStream(list);
+    ListPool&lt;UIVertex&gt;.Release(list);
+  }
+      </code></pre>
+      
+      <p>The class also contains several helper methods like <code>GetCenterPosition</code> and <code>GetUpperPosition</code> that calculate the center and upper positions of a vertex:</p>
+      
+      <pre><code class="hljs csharp">
+  protected Vector2 GetCenterPosition(int index, List&lt;UIVertex&gt; ui_vertext_list)
+  {
+    return Vector2.Lerp(ui_vertext_list[index].position, ui_vertext_list[index + 3].position, 0.5f);
+  }
+  
+  protected Vector2 GetUpperPosition(int index, List&lt;UIVertex&gt; ui_vertext_list)
+  {
+    return Vector2.Lerp(ui_vertext_list[index].position, ui_vertext_list[index + 1].position, 0.5f);
+  }
+      </code></pre>
+      
+      <p>And finally, the class contains a protected field <code>text_</code> of type <code>Text</code> and a constant <code>CHARACTER_VERTEX_MAX</code> set to 6:</p>
+      
+      <pre><code class="hljs csharp">
+  protected const int CHARACTER_VERTEX_MAX = 6;
+  protected Text text_;
+      </code></pre>
+    </div>
+    <footer>
+      <p>
+        Copyright (c) Creeper76 2024 <br />
+        PWAAT Docs is an independent project and is not endorsed, sponsored, or
+        affiliated with Capcom Co., Ltd.
+      </p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+
+      document
+        .getElementById("viewCode")
+        .addEventListener("click", function () {
+          var codeBlock = document.getElementById("codeBlock");
+          if (codeBlock.style.display === "none") {
+            codeBlock.style.display = "block";
+          } else {
+            codeBlock.style.display = "none";
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DoubleQuotationAdjustment - PWAAT Documentation - Written by Creeper76</title>
+    <link rel="stylesheet" href="/codethemes/AriakeDark.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: #282a36;
+        color: #f8f8f2;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+      footer {
+        margin-top: auto;
+        width: 100%;
+        text-align: center;
+        font-size: 0.8em;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        max-width: 800px;
+        padding: 2em;
+      }
+      pre {
+        background-color: #44475a;
+        padding: 1em;
+        overflow-x: auto;
+        border-radius: 5px;
+      }
+      a {
+        color: #f8f8f2;
+        text-decoration: underline;
+      }
+      a:hover {
+        color: #a93cdb;
+      }
+      .btn {
+        background-color: #44475a;
+        color: #f8f8f2;
+        border: none;
+        padding: 0.5em;
+        margin-top: 0.5em;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .btn:hover {
+        background-color: #a93cdb;
+        color: #282a36;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>PWAAT - DoubleQuotationAdjustment</h1>
+      <a href="../../index.html" style="font-size: 14px"><i>Back to Home</i></a>
+      <button id="viewCode" type="button" class="btn btn-primary">
+        <i class="fa fa-code"></i>
+      </button>
+      <div id="codeBlock" style="display: none">
+        <pre><code class="hljs csharp">
+  using System;
+  using System.Collections.Generic;
+  using UnityEngine;
+  
+  namespace TextEffect
+  {
+    // Token: 0x0200018B RID: 395
+    public class DoubleQuotationAdjustment : BaseMessageTextEffect
+    {
+      // Token: 0x06000E3E RID: 3646 RVA: 0x000911C0 File Offset: 0x0008F5C0
+      public override void MessageModifyMesh(ref List<UIVertex> stream)
+      {
+        if (this.text_ == null)
+        {
+          return;
+        }
+        int num = this.CountChar(this.text_.text, '“');
+        num += this.CountChar(this.text_.text, '”');
+        TextAnchor alignment = this.text_.alignment;
+        float num2 = 0f;
+        if (alignment == TextAnchor.UpperCenter)
+        {
+          num2 = (float)num * (this.alignment_uppercenter_quotation_diff_ / 2f);
+        }
+        float num3 = 0f;
+        int i = 0;
+        int count = stream.Count;
+        int num4 = 0;
+        while (i < count)
+        {
+          Vector2 centerPosition = base.GetCenterPosition(i, stream);
+          if (this.text_.text[num4] == '“')
+          {
+            if (GSStatic.global_work_.language == Language.CHINA_S)
+            {
+              num3 += ((alignment != TextAnchor.UpperLeft) ? this.alignment_uppercenter_quotation_diff_china_s_ : this.alignment_upperleft_quotation_diff_china_s_);
+            }
+            else
+            {
+              num3 += ((alignment != TextAnchor.UpperLeft) ? this.alignment_uppercenter_quotation_diff_ : this.alignment_upperleft_quotation_diff_);
+            }
+          }
+          else if (num4 > 0 && this.text_.text[num4 - 1] == '”')
+          {
+            if (GSStatic.global_work_.language == Language.CHINA_S)
+            {
+              num3 += ((alignment != TextAnchor.UpperLeft) ? this.alignment_uppercenter_quotation_diff_china_s_ : this.alignment_upperleft_quotation_diff_china_s_);
+            }
+            else
+            {
+              num3 += ((alignment != TextAnchor.UpperLeft) ? this.alignment_uppercenter_quotation_diff_ : this.alignment_upperleft_quotation_diff_);
+            }
+          }
+          else if (GSStatic.global_work_.language != Language.JAPAN && GSStatic.global_work_.language != Language.USA)
+          {
+            if (this.text_.text[num4] == 'ï')
+            {
+              num3 += this.diaeresis_i_diff_;
+            }
+            if (num4 > 0 && this.text_.text[num4 - 1] == 'ï')
+            {
+              num3 += this.diaeresis_i_diff_;
+            }
+          }
+          for (int j = 0; j < 6; j++)
+          {
+            UIVertex uivertex = stream[i + j];
+            Vector2 vector = uivertex.position - centerPosition;
+            vector = new Vector2(vector.x + num3 - num2, vector.y);
+            uivertex.position = vector + centerPosition;
+            stream[i + j] = uivertex;
+          }
+          i += 6;
+          num4++;
+        }
+        this.text_.GraphicUpdateComplete();
+      }
+  
+      // Token: 0x06000E3F RID: 3647 RVA: 0x00091449 File Offset: 0x0008F849
+      private int CountChar(string s, char c)
+      {
+        return s.Length - s.Replace(c.ToString(), string.Empty).Length;
+      }
+  
+      // Token: 0x04001856 RID: 6230
+      [SerializeField]
+      private float alignment_upperleft_quotation_diff_ = 34f;
+  
+      // Token: 0x04001857 RID: 6231
+      [SerializeField]
+      private float alignment_upperleft_quotation_diff_china_s_ = 32f;
+  
+      // Token: 0x04001858 RID: 6232
+      [SerializeField]
+      private float alignment_uppercenter_quotation_diff_ = 25f;
+  
+      // Token: 0x04001859 RID: 6233
+      [SerializeField]
+      private float alignment_uppercenter_quotation_diff_china_s_ = 24f;
+  
+      // Token: 0x0400185A RID: 6234
+      [SerializeField]
+      private float diaeresis_i_diff_ = 2.8f;
+  
+      // Token: 0x0400185B RID: 6235
+      private const char BEGIN_QUOTATION = '“';
+  
+      // Token: 0x0400185C RID: 6236
+      private const char END_QUOTATION = '”';
+  
+      // Token: 0x0400185D RID: 6237
+      private const char DIAERESIS_I = 'ï';
+    }
+  }
+        </code></pre>
+      </div>
+      <p>The <code>DoubleQuotationAdjustment</code> class is a subclass of the <code>BaseMessageTextEffect</code> class. It is used to adjust the position of double quotation marks in a text message, depending on the language and alignment of the text.</p>
+      
+      <p>Here is the class declaration:</p>
+      
+      <pre><code class="hljs csharp">
+  public class DoubleQuotationAdjustment : BaseMessageTextEffect
+      </code></pre>
+      
+      <p>The main method in this class is <code>MessageModifyMesh</code>. It modifies the vertices of the text mesh to adjust the position of the double quotation marks. Here is the method signature:</p>
+      
+      <pre><code class="hljs csharp">
+  public override void MessageModifyMesh(ref List&lt;UIVertex&gt; stream)
+      </code></pre>
+      
+      <p>The method <code>CountChar</code> is a helper method that counts the number of occurrences of a specific character in a string. Here is the method signature:</p>
+      
+      <pre><code class="hljs csharp">
+  private int CountChar(string s, char c)
+      </code></pre>
+      
+      <p>The class also contains several private fields that store the adjustment values for different scenarios. Here are the field declarations:</p>
+      
+      <pre><code class="hljs csharp">
+  [SerializeField]
+  private float alignment_upperleft_quotation_diff_ = 34f;
+
+  [SerializeField]
+  private float alignment_upperleft_quotation_diff_china_s_ = 32f;
+
+  [SerializeField]
+  private float alignment_uppercenter_quotation_diff_ = 25f;
+
+  [SerializeField]
+  private float alignment_uppercenter_quotation_diff_china_s_ = 24f;
+
+  [SerializeField]
+  private float diaeresis_i_diff_ = 2.8f;
+      </code></pre>
+      
+      <p>And finally, the class contains several constant character fields that represent the characters to be adjusted. Here are the field declarations:</p>
+      
+      <pre><code class="hljs csharp">
+  private const char BEGIN_QUOTATION = '“';
+  private const char END_QUOTATION = '”';
+  private const char DIAERESIS_I = 'ï';
+      </code></pre>
+    </div>
+    <footer>
+      <p>
+        Copyright (c) Creeper76 2024 <br />
+        PWAAT Docs is an independent project and is not endorsed, sponsored, or
+        affiliated with Capcom Co., Ltd.
+      </p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+
+      document
+        .getElementById("viewCode")
+        .addEventListener("click", function () {
+          var codeBlock = document.getElementById("codeBlock");
+          if (codeBlock.style.display === "none") {
+            codeBlock.style.display = "block";
+          } else {
+            codeBlock.style.display = "none";
+          }
+        });
+    </script>
+  </body>
+</html>
