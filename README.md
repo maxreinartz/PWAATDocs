@@ -14,5 +14,5 @@ Pull requests are welcome!
 
 ## License
 
-This project is licensed under Creeper76's Software License.
+This project is licensed under Max Reinartz's Software License.
 Check the LICENSE file for more.
